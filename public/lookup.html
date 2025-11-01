@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lookup Certificate</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary-color: #1a472a;
+      --secondary-color: #2d5016;
+      --accent-color: #d4af37;
+      --gold-color: #f4d03f;
+      --text-color: #333;
+      --border-color: #ddd;
+      --bg-light: #f8f9fa;
+      --shadow: 0 10px 40px rgba(0,0,0,0.1);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+      --font-primary: 'Georgia', 'Times New Roman', serif;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    body {
+      background: #ffffff;
+      min-height: 100vh;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Floating Bubbles Animation */
+    .bubbles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.04));
+      filter: blur(0.5px);
+      animation: floatFast 8s infinite linear;
+    }
+    
+    .bubble::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      width: 30%;
+      height: 30%;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+    }
+    
+    @keyframes floatFast {
+      0% {
+        transform: translateY(110vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      5% {
+        opacity: 0.6;
+      }
+      95% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-10vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    .certificate-container {
+      max-width: 210mm;
+      margin: 0 auto;
+      background: 
+        linear-gradient(135deg, #fefefe 0%, #faf8f3 50%, #fefefe 100%),
+        radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      padding: 60px;
+      border: 20px double var(--primary-color);
+      border-radius: 15px;
+      box-shadow: 
+        0 0 0 8px rgba(212, 175, 55, 0.3),
+        0 0 0 16px rgba(26, 71, 42, 0.1),
+        var(--shadow-lg),
+        inset 0 0 50px rgba(212, 175, 55, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Decorative corner elements */
+    .certificate-container::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+    
+    .certificate-container::after {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      right: 30px;
+      bottom: 30px;
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(212, 175, 55, 0.1) 2px,
+          rgba(212, 175, 55, 0.1) 4px
+        );
+      pointer-events: none;
+      opacity: 0.3;
+    }
+    
+    .certificate-header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding: 40px 0;
+      border-bottom: 6px double var(--accent-color);
+      border-top: 3px solid rgba(212, 175, 55, 0.3);
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.05), transparent);
+    }
+    
+    /* Decorative header lines */
+    .certificate-header::before,
+    .certificate-header::after {
+      content: '◆ ◆ ◆';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--accent-color);
+      font-size: 14px;
+      letter-spacing: 15px;
+      opacity: 0.6;
+    }
+    
+    .certificate-header::before {
+      top: -15px;
+    }
+    
+    .certificate-header::after {
+      bottom: -15px;
+    }
+    
+    .organization-name {
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1a472a 0%, #2d5016 50%, #1a472a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      text-shadow: 0 0 30px rgba(26, 71, 42, 0.2);
+      position: relative;
+      padding: 20px 0;
+    }
+    
+    .organization-name::before,
+    .organization-name::after {
+      content: '✦';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-color);
+      font-size: 24px;
+      opacity: 0.7;
+    }
+    
+    .organization-name::before {
+      left: -40px;
+    }
+    
+    .organization-name::after {
+      right: -40px;
+    }
+    
+    .certificate-title {
+      font-size: 28px;
+      color: var(--secondary-color);
+      font-style: italic;
+      font-weight: 500;
+      margin-top: 15px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      letter-spacing: 2px;
+    }
+    
+    .student-name {
+      font-size: 38px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1a472a 0%, #2d5016 50%, #1a472a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-transform: uppercase;
+      margin: 35px 0;
+      border-bottom: 4px double var(--accent-color);
+      border-top: 4px double var(--accent-color);
+      display: inline-block;
+      padding: 18px 50px;
+      border-radius: 8px;
+      box-shadow: 
+        0 6px 20px rgba(212, 175, 55, 0.3),
+        inset 0 2px 10px rgba(212, 175, 55, 0.1);
+      letter-spacing: 3px;
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .student-name::before,
+    .student-name::after {
+      content: '✧';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-color);
+      font-size: 20px;
+      opacity: 0.8;
+    }
+    
+    .student-name::before {
+      left: 10px;
+    }
+    
+    .student-name::after {
+      right: 10px;
+    }
+    
+    .certificate-details {
+      margin: 40px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .detail-item {
+      padding: 22px;
+      background: linear-gradient(135deg, #ffffff 0%, #faf8f3 100%);
+      border-left: 6px solid var(--accent-color);
+      border-right: 2px solid rgba(212, 175, 55, 0.2);
+      border-top: 2px solid rgba(212, 175, 55, 0.2);
+      border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+      border-radius: 10px;
+      box-shadow: 
+        0 4px 15px rgba(0,0,0,0.1),
+        inset 0 1px 3px rgba(212, 175, 55, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+    
+    .detail-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent-color) 0%, rgba(212, 175, 55, 0.5) 100%);
+      border-radius: 10px 0 0 10px;
+    }
+    
+    .detail-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 8px 25px rgba(0,0,0,0.15),
+        inset 0 1px 3px rgba(212, 175, 55, 0.15);
+    }
+    
+    .detail-label {
+      font-weight: 700;
+      color: var(--secondary-color);
+      margin-bottom: 10px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      padding-bottom: 5px;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .detail-value {
+      font-size: 18px;
+      color: var(--text-color);
+      font-weight: 600;
+      line-height: 1.6;
+      font-family: var(--font-primary);
+    }
+    
+    .certificate-footer {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 4px double rgba(212, 175, 55, 0.4);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .certificate-footer::before {
+      content: '◆ ◆ ◆';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--accent-color);
+      font-size: 12px;
+      letter-spacing: 20px;
+      opacity: 0.5;
+      background: linear-gradient(135deg, #fefefe 0%, #faf8f3 100%);
+      padding: 0 20px;
+    }
+    
+    .signature-block {
+      text-align: center;
+      width: 220px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      border: 2px solid rgba(212, 175, 55, 0.2);
+    }
+    
+    .signature-line {
+      border-top: 3px solid var(--text-color);
+      margin: 70px 0 12px 0;
+      width: 100%;
+      position: relative;
+    }
+    
+    .signature-line::before,
+    .signature-line::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      width: 15px;
+      height: 3px;
+      background: var(--text-color);
+      border-radius: 2px;
+    }
+    
+    .signature-line::before {
+      left: 0;
+    }
+    
+    .signature-line::after {
+      right: 0;
+    }
+    
+    .signature-label {
+      font-size: 15px;
+      color: var(--secondary-color);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+    }
+    
+    .logo-img {
+      width: 200px;
+      height: auto;
+      max-height: 180px;
+      object-fit: contain;
+      margin: 0 auto 30px;
+      display: block;
+      filter: drop-shadow(0 4px 15px rgba(26, 71, 42, 0.2));
+      position: relative;
+      z-index: 1;
+    }
+    
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      
+      .search-container, .print-controls {
+        display: none;
+      }
+      
+      .certificate-container {
+        box-shadow: none;
+        border: 8px solid var(--primary-color);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Bubbles - Generated Dynamically -->
+  <div class="bubbles-container" id="bubblesContainer"></div>
+  
+  <div class="container mx-auto" style="position: relative; z-index: 1;">
+    <!-- Search Form -->
+    <div class="search-container">
+      <h1 class="text-4xl font-bold mb-2 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Certificate Lookup</h1>
+      <p class="text-center text-gray-600 mb-8 text-sm">Enter your registration number to view and download your certificate</p>
+      
+      <form id="lookupForm" class="space-y-4">
+        <div>
+          <label for="regNo" class="block text-sm font-semibold text-gray-700 mb-3">
+            📋 Registration Number
+          </label>
+          <input
+            type="text"
+            id="regNo"
+            name="regNo"
+            required
+            class="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-lg shadow-sm"
+            placeholder="Enter your registration number (e.g., 27777)"
+          />
+        </div>
+        
+        <button
+          type="submit"
+          class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+        >
+          🔍 Lookup Certificate
+        </button>
+      </form>
+      
+      <div id="errorMessage" class="hidden mt-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg shadow-md"></div>
+      
+      <div class="mt-4 text-center">
+        <a href="/" class="text-blue-600 hover:underline">← Back to Home</a>
+      </div>
+    </div>
+    
+    <!-- Certificate Display -->
+    <div id="certificateDisplay" class="hidden">
+      <div class="certificate-container" id="certificateContent">
+        <!-- Certificate content will be inserted here -->
+      </div>
+      
+      <div class="print-controls max-w-2xl mx-auto mt-8 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-200">
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button
+            onclick="window.print()"
+            class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-8 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2"
+          >
+            🖨️ Print Certificate
+          </button>
+          
+          <button
+            id="downloadPDF"
+            class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold py-3 px-8 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2"
+          >
+            📥 Download PDF
+          </button>
+          
+          <button
+            onclick="resetLookup()"
+            class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-8 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2"
+          >
+            🔄 New Lookup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let currentRegNo = '';
+    
+    document.getElementById('lookupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const regNo = document.getElementById('regNo').value.trim();
+      const errorDiv = document.getElementById('errorMessage');
+      const certificateDisplay = document.getElementById('certificateDisplay');
+      const certificateContent = document.getElementById('certificateContent');
+      
+      errorDiv.classList.add('hidden');
+      certificateDisplay.classList.add('hidden');
+      
+      if (!regNo) {
+        errorDiv.textContent = 'Please enter a registration number';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`/api/record?reg_no=${encodeURIComponent(regNo)}`);
+        
+        // Check if response is OK before parsing JSON
+        if (!response.ok) {
+          let errorMessage = 'Failed to fetch certificate';
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorMessage;
+            if (errorData.suggestion) {
+              errorMessage += '. ' + errorData.suggestion;
+            }
+          } catch (e) {
+            // If JSON parse fails, use status text
+            errorMessage = response.statusText || errorMessage;
+          }
+          
+          // Add helpful hint if 404
+          if (response.status === 404) {
+            errorMessage += ' Make sure you have uploaded the certificate file via the admin page.';
+          }
+          
+          throw new Error(errorMessage);
+        }
+        
+        const data = await response.json();
+        
+        currentRegNo = regNo;
+        displayCertificate(data.record);
+        certificateDisplay.classList.remove('hidden');
+        
+        // Scroll to certificate
+        certificateDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+      } catch (error) {
+        errorDiv.textContent = error.message || 'An error occurred. Please try again.';
+        errorDiv.classList.remove('hidden');
+      }
+    });
+    
+    function displayCertificate(record) {
+      const data = record.data;
+      const certificateContent = document.getElementById('certificateContent');
+      
+      // Extract fields (handle both mapped and original data)
+      const studentName = data.studentName || data['STUDENT NAME'] || data['Student Name'] || '';
+      const registrationNo = record.registration_no || data.registrationNo || '';
+      const fatherName = data.fatherName || data['FATHERS NAME'] || data['Father\'s Name'] || '';
+      const courseName = data.courseName || data['COURSE NAME'] || data['Course Name'] || '';
+      const startDate = data.startDate || data['STARTING DATE'] || data['Start Date'] || '';
+      const endDate = data.endDate || data['END DATE'] || data['End Date'] || '';
+      const issueDate = data.issueDate || data['ISSUE DATE'] || data['Issue Date'] || '';
+      const grade = data.grade || data['GRADE'] || data['Grade'] || '';
+      
+      const originalData = data._original || data;
+      const additionalFields = Object.keys(originalData)
+        .filter(key => !['studentName', 'registrationNo', 'fatherName', 'courseName', 
+                         'startDate', 'endDate', 'issueDate', 'grade',
+                         'STUDENT NAME', 'REGISTRATION NO', 'FATHERS NAME', 'COURSE NAME',
+                         'STARTING DATE', 'END DATE', 'ISSUE DATE', 'GRADE',
+                         'Student Name', 'Registration No', 'Father\'s Name', 'Course Name',
+                         'Start Date', 'End Date', 'Issue Date', 'Grade', '_original']
+                       .includes(key));
+      
+      certificateContent.innerHTML = `
+        <div class="certificate-header">
+          <img src="/logo/logo.png" alt="ICS Group Logo" class="logo-img" />
+          <div class="organization-name">Certificate of Completion</div>
+          <div class="certificate-title">This is to certify that</div>
+        </div>
+        
+        <div class="certificate-body">
+          <div class="certificate-text" style="text-align: center; margin: 40px 0; font-size: 20px; line-height: 2;">
+            <div class="student-name">${escapeHtml(studentName)}</div>
+            <p style="margin-top: 40px; color: #555; font-size: 21px; letter-spacing: 1px;">
+              has successfully completed the course
+            </p>
+            ${courseName ? `<p style="font-weight: 700; font-size: 24px; margin: 25px 0; color: var(--secondary-color); padding: 20px 30px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%); border: 3px double rgba(212, 175, 55, 0.4); border-radius: 12px; display: inline-block; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);">${escapeHtml(courseName)}</p>` : ''}
+          </div>
+          
+          <div class="certificate-details">
+            ${registrationNo ? `
+            <div class="detail-item">
+              <div class="detail-label">Registration Number</div>
+              <div class="detail-value">${escapeHtml(registrationNo)}</div>
+            </div>
+            ` : ''}
+            
+            ${fatherName ? `
+            <div class="detail-item">
+              <div class="detail-label">Father's Name</div>
+              <div class="detail-value">${escapeHtml(fatherName)}</div>
+            </div>
+            ` : ''}
+            
+            ${startDate ? `
+            <div class="detail-item">
+              <div class="detail-label">Start Date</div>
+              <div class="detail-value">${formatDate(startDate)}</div>
+            </div>
+            ` : ''}
+            
+            ${endDate ? `
+            <div class="detail-item">
+              <div class="detail-label">End Date</div>
+              <div class="detail-value">${formatDate(endDate)}</div>
+            </div>
+            ` : ''}
+            
+            ${issueDate ? `
+            <div class="detail-item">
+              <div class="detail-label">Issue Date</div>
+              <div class="detail-value">${formatDate(issueDate)}</div>
+            </div>
+            ` : ''}
+            
+            ${grade ? `
+            <div class="detail-item" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%); border: 4px double var(--accent-color); padding: 30px;">
+              <div class="detail-label" style="font-size: 16px; margin-bottom: 15px;">Grade</div>
+              <div class="detail-value" style="font-size: 48px; font-weight: 800; color: var(--accent-color); text-shadow: 3px 3px 6px rgba(0,0,0,0.15); letter-spacing: 5px; text-align: center;">${escapeHtml(grade)}</div>
+            </div>
+            ` : ''}
+          </div>
+          
+          ${additionalFields.length > 0 ? `
+          <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid rgba(26, 71, 42, 0.1);">
+            <h3 style="color: var(--secondary-color); margin-bottom: 20px; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px;">Additional Information</h3>
+            <div class="certificate-details">
+              ${additionalFields.map(field => `
+                <div class="detail-item">
+                  <div class="detail-label">${escapeHtml(formatFieldName(field))}</div>
+                  <div class="detail-value">${escapeHtml(String(originalData[field] || ''))}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          ` : ''}
+        </div>
+        
+        <div class="certificate-footer">
+          <div class="signature-block">
+            <div class="signature-line"></div>
+            <div class="signature-label">Authorized Signature</div>
+          </div>
+          
+          <div class="signature-block">
+            <div class="signature-line"></div>
+            <div class="signature-label">Date: ${formatDate(issueDate || new Date().toISOString())}</div>
+          </div>
+        </div>
+      `;
+    }
+    
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function formatDate(dateString) {
+      if (!dateString) return '';
+      
+      try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+          return dateString;
+        }
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      } catch (e) {
+        return dateString;
+      }
+    }
+    
+    function formatFieldName(fieldName) {
+      return fieldName
+        .replace(/_/g, ' ')
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, str => str.toUpperCase())
+        .trim();
+    }
+    
+    function resetLookup() {
+      document.getElementById('lookupForm').reset();
+      document.getElementById('certificateDisplay').classList.add('hidden');
+      document.getElementById('errorMessage').classList.add('hidden');
+      document.getElementById('regNo').focus();
+    }
+    
+    // PDF Download
+    document.getElementById('downloadPDF').addEventListener('click', async () => {
+      if (!currentRegNo) return;
+      
+      try {
+        const response = await fetch(`/api/pdf?reg_no=${encodeURIComponent(currentRegNo)}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to generate PDF');
+        }
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `certificate_${currentRegNo}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+      } catch (error) {
+        alert('Failed to download PDF: ' + error.message);
+      }
+    });
+    
+    // Generate 200+ bubbles dynamically
+    function generateBubbles() {
+      const container = document.getElementById('bubblesContainer');
+      const bubbleCount = 200;
+      
+      for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        
+        // Random size between 20px and 50px
+        const size = Math.random() * 30 + 20;
+        bubble.style.width = size + 'px';
+        bubble.style.height = size + 'px';
+        
+        // Random horizontal position
+        bubble.style.left = Math.random() * 100 + '%';
+        
+        // Random animation delay (0 to 8 seconds)
+        bubble.style.animationDelay = Math.random() * 8 + 's';
+        
+        // Random animation duration (6 to 10 seconds for variety)
+        const duration = Math.random() * 4 + 6;
+        bubble.style.animationDuration = duration + 's';
+        
+        container.appendChild(bubble);
+      }
+    }
+    
+    // Generate bubbles when page loads
+    window.addEventListener('DOMContentLoaded', generateBubbles);
+  </script>
+</body>
+</html>
+

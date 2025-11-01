@@ -1,0 +1,14 @@
+node_modules/
+*.log
+.env
+*.db
+*.sqlite
+*.sqlite3
+uploads/
+backups/
+coverage/
+.DS_Store
+*.xlsx
+*.xls
+*.csv
+
